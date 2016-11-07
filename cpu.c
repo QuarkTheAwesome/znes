@@ -484,7 +484,6 @@ void cpu_cycle(void)
 			c.cycles += 2;
 		break;
 		default:
-			defaul:
 			printf("A: %02X, X: %02X, Y: %02X\n", c.a, c.x, c.y);
 			printf("Z: %1u, N: %1u, V: %1u, C: %1u\n", c.z, c.n, c.v, c.c);
 			printf("I: %1u, D: %1u, SP: %04X\n", c.i, c.d, c.sp);
@@ -492,7 +491,7 @@ void cpu_cycle(void)
 			for(t = c.pc; t < c.pc+16; t++)
 				printf("%02X ", get_byte_at(t));
 			printf("\n");
-			exit(0);
+			//exit(0);
 		break;
 	}
 }

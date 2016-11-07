@@ -2,20 +2,22 @@
 #include <string.h>
 #include <stdio.h>
 #include "mem.h"
+#include "ppu.h"
 #include "mmc.h"
 #include "rom.h"
 
-static unsigned char *mem;
+//this is extern'd out to EmulationManager.c
+unsigned char *znes_mem;
 static int banksize;
 static int swapbank;
 
 unsigned char *mem_getaddr(unsigned int b)
 {
-	return &mem[b];
+	return &znes_mem[b];
 }
 unsigned int get_short_at(unsigned int addr)
 {
-	return mem[addr+1] << 8 | mem[addr];
+	return znes_mem[addr+1] << 8 | znes_mem[addr];
 }
 
 static unsigned char readb(unsigned int addr)
@@ -27,7 +29,7 @@ static unsigned char readb(unsigned int addr)
 		break;
 	}
 
-	return mem[addr];
+	return znes_mem[addr];
 }
 unsigned char get_byte_at(unsigned int addr)
 {
@@ -38,9 +40,9 @@ void init_mem(void)
 {
 	unsigned char *b = rom_getbytes();
 
-	mem = calloc(0x10000, 1); /* 0 - FFFF */
-	memcpy(&mem[0x8000], b+0x38000, 16384);
-	memcpy(&mem[0xC000], b+0x3C000, 16384);
+	znes_mem = calloc(0x10000, 1); /* 0 - FFFF */
+	memcpy(&znes_mem[0x8000], b+0x38000, 16384);
+	memcpy(&znes_mem[0xC000], b+0x3C000, 16384);
 //  memcpy(&mem[0x6000], sram from file);
 }
 
@@ -73,9 +75,7 @@ void writeb(unsigned int addr, unsigned char val)
 			ppu_write_data(val);
 		break;
 		default:
-			mem[addr] = val;
+			znes_mem[addr] = val;
 		break;
 	}
 }
-
-
