@@ -491,6 +491,7 @@ void cpu_cycle(void)
 			for(t = c.pc; t < c.pc+16; t++)
 				printf("%02X ", get_byte_at(t));
 			printf("\n");
+			c.pc += 1; //let's just power ahead
 			//exit(0);
 		break;
 	}
